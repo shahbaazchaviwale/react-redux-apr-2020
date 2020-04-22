@@ -1,19 +1,18 @@
 import { handleResponse, handleError } from "./apiUtils";
 // const baseUrl = process.env.API_URL + "/courses/";
 // added code 14-apr-2020
-const baseUrl = 'http://localhost:3001' + "/courses/";
+const baseUrl = "http://localhost:3001" + "/courses/";
 
 export function getCourses() {
-  return fetch(baseUrl)
-    .then(handleResponse)
-    .catch(handleError);
+  return fetch(baseUrl).then(handleResponse).catch(handleError);
 }
 
 export function saveCourse(course) {
+  console.log("saveCourse >>", course.id);
   return fetch(baseUrl + (course.id || ""), {
     method: course.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
     headers: { "content-type": "application/json" },
-    body: JSON.stringify(course)
+    body: JSON.stringify(course),
   })
     .then(handleResponse)
     .catch(handleError);

@@ -4,7 +4,7 @@ const courses = [
     title: "Securing React Apps with Auth0",
     slug: "react-auth0-authentication-security",
     authorId: 1,
-    category: "JavaScript",
+    category: "JavaScript-1",
   },
   {
     id: 2,
