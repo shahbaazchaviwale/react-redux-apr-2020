@@ -11,6 +11,9 @@ import Course from "./component/Course";
 import configureStore from "./redux/configureStore";
 import { Provider as ReduxProvider } from "react-redux";
 import CourseManagePage from "./component/CourseManagePage";
+// added code 22-apr-2020
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const store = configureStore();
 
@@ -27,6 +30,8 @@ function App() {
           <Route path="/course" component={CourseManagePage} />
           <Route component={PageNotFound} />
         </Switch>
+        {/* added code 22-apr-2020 */}
+        <ToastContainer autoClose={3000} hideProgressBar></ToastContainer>
       </Router>
     </ReduxProvider>
   );

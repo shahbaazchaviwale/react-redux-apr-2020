@@ -7,6 +7,9 @@ import { bindActionCreators } from "redux";
 import CourseList from "./CourseList";
 import * as authorAction from "../redux/action/authorAction";
 import { Redirect } from "react-router-dom";
+// added code 22-apr-2020
+import Spinner from "./common/Spinner";
+import { toast } from "react-toastify";
 class Course extends Component {
   constructor(props) {
     super(props);
@@ -45,9 +48,18 @@ class Course extends Component {
     const tempCourse = { ...this.state.course, title: "" };
     this.setState({ course: tempCourse }, console.log("state >>", this.state));
   };
-
+  // added code 28-apr-2020
+  handleDeleteCourse = (course) => {
+    toast.success("Course Deleted !!");
+    this.props.actions.deleteCourse(course).catch((error) => {
+      toast.error("Delete Failed !!" + error.message, { autoClose: false });
+    });
+  };
   render() {
-    return (
+    // added code 22-apr-2020
+    return this.props.loading ? (
+      <Spinner />
+    ) : (
       <div className="container">
         {this.state.redirectToAddCoursePage && <Redirect to="/course" />}
         <h1>Course</h1>
@@ -59,7 +71,11 @@ class Course extends Component {
         >
           Add Course
         </button>
-        <CourseList courses={this.props.courses} authors={this.props.authors} />
+        <CourseList
+          courses={this.props.courses}
+          authors={this.props.authors}
+          onDeleteClick={this.handleDeleteCourse}
+        />
       </div>
     );
   }
@@ -80,22 +96,18 @@ const mapStateToProps = (state) => {
             };
           }),
     authors: state.authors,
+    // added code 22-apr-2020
+    loading: state.apiLoadingStatus,
   };
 };
-/**
- ***** single creation action options
- *  const mapDispatchToProps = (dispatch) => {
-    return {
-        actions: bindActionCreators(courseAction, dispatch)
-    }
-}
- * 
- */
+
 const mapDispatchToProps = (dispatch) => {
   return {
     actions: {
       loadCourses: bindActionCreators(courseAction, dispatch),
       loadAuthors: bindActionCreators(authorAction.loadAuthorApi, dispatch),
+      // added code 28-apr-2020
+      deleteCourse: bindActionCreators(courseAction.deleteCourse, dispatch),
     },
   };
 };

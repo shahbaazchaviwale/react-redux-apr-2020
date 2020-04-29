@@ -4,6 +4,9 @@ import { loadCourseFromApi, saveCourse } from "../redux/action/courseAction";
 import { loadAuthorApi } from "../redux/action/authorAction";
 import { newCourse } from "../mockData";
 import CourseForm from "./CourseForm";
+// added code 22-apr-2020
+import Spinner from "./common/Spinner";
+import { toast } from "react-toastify";
 
 function CourseManagePage({
   courses,
@@ -17,6 +20,8 @@ function CourseManagePage({
   console.log("new course - 1>>", props);
   const [course, setCourse] = useState({ ...props.course });
   const [errors, setError] = useState({});
+  // added code 22-apr-2020
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     //  destructure
@@ -29,6 +34,7 @@ function CourseManagePage({
     } else {
       setCourse({ ...props.course });
     }
+
     if (authors.length === 0) {
       actionLoadAuthors().catch((error) => {
         alert("loading author failed !!", error);
@@ -44,14 +50,44 @@ function CourseManagePage({
     }));
   }
 
+  // added code 28-apr-2020
+  function formValidation() {
+    const { title, authorId, category } = course;
+    console.log("course >>", course);
+    const error = {};
+    if (!title) error.title = "Please enter title !";
+    if (!authorId) error.author = "Please enter author !";
+    if (!category) error.category = "Please enter category !";
+    // set hooks
+    setError(error);
+    console.log("error >>", error);
+    // check length of Error
+    return Object.keys(error).length === 0;
+  }
   function handleSave(event) {
     event.preventDefault();
-    actionSaveCourse(course).then(() => {
-      history.push("/courses");
-    });
+    // if validation has error "return" stop execution
+    if (!formValidation()) return;
+    // added code 22-apr-2020
+    setSaving(true);
+    actionSaveCourse(course)
+      .then(() => {
+        // added code 22-apr-2020
+        toast.success("course added!!");
+        history.push("/courses");
+      })
+      .catch((error) => {
+        // handle error here from api
+        // added code 28-apr-2020
+        setSaving(false);
+        setError({ onSave: error.message });
+      });
   }
 
-  return (
+  // added code 22-apr-2020
+  return courses.length === 0 || authors.length === 0 ? (
+    <Spinner />
+  ) : (
     <div>
       <h1>Manage Course</h1>
       <CourseForm
@@ -60,6 +96,7 @@ function CourseManagePage({
         authors={authors}
         onChange={handleChange}
         onSave={handleSave}
+        saving={saving}
       />
     </div>
   );

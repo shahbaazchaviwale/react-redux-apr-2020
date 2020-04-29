@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 let data = [];
-const CourseList = ({ courses, authors }) => (
+// added code 28-apr-2020  "onDeleteClick"
+const CourseList = ({ courses, authors, onDeleteClick }) => (
   // added code 16-apr-2020
   /**
      * ==============combined 2 api data into 1 array===============
@@ -23,6 +24,7 @@ const CourseList = ({ courses, authors }) => (
         <th>Title</th>
         <th>Author</th>
         <th>Category</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -42,6 +44,15 @@ const CourseList = ({ courses, authors }) => (
             </td>
             <td>{course.authorName}</td>
             <td>{course.category}</td>
+            <td>
+              {/* // added code 28-apr-2020  "onDeleteClick"  */}
+              <button
+                className="btn btn-outliner-danger"
+                onClick={() => onDeleteClick(course)}
+              >
+                Delete
+              </button>
+            </td>
           </tr>
         );
       })}

@@ -10,6 +10,11 @@ export async function handleResponse(response) {
 }
 
 // In a real app, would likely call an error logging service.
+
+/***
+ * below code is used API calls page like "courseApi.js", "authorApi.js"
+ */
+
 export function handleError(error) {
   // eslint-disable-next-line no-console
   console.error("API call failed. " + error);

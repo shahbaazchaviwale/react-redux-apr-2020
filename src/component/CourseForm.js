@@ -24,7 +24,7 @@ const CourseForm = ({
         label="Title"
         value={course.title}
         onChange={onChange}
-        error={errors.title}
+        error={errors.title} //this client validation use
       />
 
       <SelectInput
